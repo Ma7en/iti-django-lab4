@@ -19,9 +19,11 @@ class Trainee(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
-    image = models.ImageField(upload_to="track/images/", blank=True, null=True)
-    account_obj = models.ForeignKey("account.Account", on_delete=models.CASCADE)
-    track_obj = models.ForeignKey("track.Track", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="trainee/images/", blank=True, null=True)
+    account_obj = models.ForeignKey(
+        "account.Account", on_delete=models.CASCADE, null=True
+    )
+    track_obj = models.ForeignKey("track.Track", on_delete=models.CASCADE, null=True)
 
     @staticmethod
     def get_list_url():
@@ -44,13 +46,14 @@ class Trainee(models.Model):
         account_obj,
         track_obj,
     ):
-        traineeobj = cls()
-        traineeobj.first_name = first_name
-        traineeobj.last_name = last_name
-        traineeobj.date_of_birth = date_of_birth
-        traineeobj.image = image
-        traineeobj.account_obj = account_obj
-        traineeobj.track_obj = track_obj
+        traineeobj = cls(
+            first_name=first_name,
+            last_name=last_name,
+            date_of_birth=date_of_birth,
+            image=image,
+            account_obj=account_obj,
+            track_obj=track_obj,
+        )
         traineeobj.save()
         return cls.get_list_url()
 

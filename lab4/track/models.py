@@ -15,6 +15,9 @@ class Track(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to="track/images/", blank=True, null=True)
 
+    def __str__(self):
+        return self.name
+
     @staticmethod
     def get_list_url():
         return reverse("track_list")

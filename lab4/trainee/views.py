@@ -4,38 +4,90 @@ from .models import *
 from .forms import *
 from account.models import *
 from track.models import *
+from django.views import View
+from django.views.generic import (
+    ListView,
+    UpdateView,
+    DeleteView,
+    DetailView,
+    CreateView,
+)
+from django.urls import reverse_lazy
 
 
-# =================================================================
 # Create your views here.
-def trainee_list(request):
-    context = {}
-    # traineesobj = Trainee.objects.all()  # Fetch all records from the database
-    trainees = Trainee.list_trainee()
-    context["trainees"] = trainees
-    return render(request, "trainee/list.html", context)
 
 
 # =================================================================
-def trainee_create(request):
+# def trainee_list(request):
+#     context = {}
+#     # traineesobj = Trainee.objects.all()  # Fetch all records from the database
+#     trainees = Trainee.list_trainee()
+#     context["trainees"] = trainees
+#     return render(request, "trainee/list.html", context)
+
+
+class TraineeListG(ListView):
+    model = Trainee
+    template_name = "trainee/list.html"
+    context_object_name = "trainees"
+
+
+# =================================================================
+# def trainee_create(request):
+#     context = {}
+#     form = CreateTrainee()
+#     context["form"] = form
+#     if request.method == "POST":
+#         form = CreateTrainee(request.POST, request.FILES)
+#         if form.is_valid():
+#             traineeobj = Trainee.create_trainee(
+#                 form.cleaned_data["first_name"],
+#                 form.cleaned_data["last_name"],
+#                 form.cleaned_data["date_of_birth"],
+#                 form.cleaned_data["image"],
+#                 form.cleaned_data["account_obj"],
+#                 form.cleaned_data["track_obj"],
+#             )
+#             return redirect(traineeobj)
+#         else:
+#             context["error"] = form.errors
+#     return render(request, "trainee/create.html", context)
+
+
+# def trainee_create(request):
+#     context = {}
+#     form = CreateTraineeModel()
+#     context = {"form": form}
+#     if request.method == "POST":
+#         form = CreateTraineeModel(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save(commit=True)
+#             return redirect(Trainee.get_list_url)
+#     return render(request, "trainee/create.html", context)
+
+
+class TraineeCreate(View):
+    # request method get --> call instantiate get
     context = {}
-    form = CreateTrainee()
-    context["form"] = form
-    if request.method == "POST":
-        form = CreateTrainee(request.POST, request.FILES)
+    # context["accounts"] = Account.objects.all()
+    # context["tracks"] = Track.objects.all()
+
+    def get(self, request):
+        form = CreateTraineeModel()
+        self.context["form"] = form
+        return render(request, "trainee/create.html", TraineeCreate.context)
+
+    def post(self, request):
+        form = CreateTraineeModel(request.POST, request.FILES)
         if form.is_valid():
-            traineeobj = Trainee.create_trainee(
-                form.cleaned_data["first_name"],
-                form.cleaned_data["last_name"],
-                form.cleaned_data["date_of_birth"],
-                form.cleaned_data["image"],
-                form.cleaned_data["account_obj"],
-                form.cleaned_data["track_obj"],
-            )
-            return redirect(traineeobj)
+            form.save()
+            return redirect(Trainee.get_list_url())
         else:
-            context["error"] = form.errors
-    return render(request, "trainee/create.html", context)
+            self.context["form"] = form
+            self.context["error"] = form.errors
+
+        return render(request, "trainee/create.html", self.context)
 
 
 # =================================================================
@@ -90,6 +142,9 @@ def trainee_update(request, id):
     return render(request, "trainee/update.html", context)
 
 
+# class TraineeUpdateG
+
+
 # =================================================================
 def trainee_delete(request, id):
     try:
@@ -111,3 +166,9 @@ def trainee_details(request, id):
     except Trainee.DoesNotExist:
         return HttpResponse("Trainee not found", status=404)
     return render(request, "trainee/details.html", context)
+
+
+# class TraineeDetailsG(DetailView):
+#     model = Trainee
+#     template_name = "trainee/details.html"
+#     context_object_name = "trainee"
