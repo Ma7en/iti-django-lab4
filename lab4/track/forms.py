@@ -1,13 +1,8 @@
 from django import forms
+from .models import *
 
 
 class CreateTrack(forms.Form):
-    # name = forms.CharField(required=True, max_length=100, label="Name")
-    # description = forms.CharField(
-    #     required=True, label="Description", widget=forms.Textarea
-    # )
-    # description = forms.CharField(required=True, label="Description")
-    # image = forms.ImageField(required=False, label="Image")
     name = forms.CharField(
         required=True,
         max_length=100,
@@ -24,6 +19,13 @@ class CreateTrack(forms.Form):
         ),
     )
     image = forms.ImageField(required=False, label="Image", widget=forms.FileInput())
+
+
+class CreateTrackModel(forms.ModelForm):
+    class Meta:
+        model = Track
+        fields = "__all__"
+        # excludes = [""]
 
 
 class UpdateTrack(forms.Form):

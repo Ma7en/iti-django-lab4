@@ -5,8 +5,10 @@ from .models import *
 from .forms import *
 
 
-# =================================================================
 # Create your views here.
+
+
+# =================================================================
 def track_list(request):
     context = {}
     tracks = Track.list_track()
@@ -17,65 +19,32 @@ def track_list(request):
 # =================================================================
 # def track_create(request):
 #     context = {}
+#     form = CreateTrack()
+#     context["form"] = form
 #     if request.method == "POST":
-#         # validation on the server side
-#         name = request.POST["name"]
-#         description = request.POST["description"]
-#         image = request.FILES.get("image")
-#         if len(name) > 0 and len(name) <= 100 and description and image:
+#         # publich data user enter
+#         form = CreateTrack(request.POST, request.FILES)
+#         if form.is_valid():
+#             # create object from book
+#             name = form.cleaned_data["name"]
+#             description = form.cleaned_data["description"]
+#             image = form.cleaned_data["image"]
+
 #             trackobj = Track.create_track(name, description, image)
 #             return redirect(trackobj)
 #         else:
-#             context["error"] = "Invalid data"
+#             context["error"] = form.errors
 #     return render(request, "track/create.html", context)
 
 
 def track_create(request):
     context = {}
-    form = CreateTrack()
-    context["form"] = form
-    if request.method == "POST":
-        # publich data user enter
-        form = CreateTrack(request.POST, request.FILES)
-        if form.is_valid():
-            # create object from book
-            trackobj = Track.create_track(
-                form.cleaned_data["name"],
-                form.cleaned_data["description"],
-                form.cleaned_data["image"],
-            )
-            return redirect(trackobj)
-        else:
-            context["error"] = form.errors
-
+    form = CreateTrackModel()
+    context = {"form": form}
     return render(request, "track/create.html", context)
 
 
 # =================================================================
-# def track_update(request, id):
-#     context = {}
-#     try:
-#         trackobj = Track.objects.get(id=id)
-#         if request.method == "POST":
-#             name = request.POST["name"]
-#             description = request.POST["description"]
-
-#             if "image" in request.FILES:
-#                 image = request.FILES["image"]
-#             else:
-#                 image = trackobj.image
-
-#             if len(name) > 0 and len(name) <= 100 and description:
-#                 track_url = Track.update_track(id, name, description, image)
-#                 return redirect(track_url)
-#             else:
-#                 context["error"] = "Invalid data"
-#         context["track"] = trackobj
-#     except Track.DoesNotExist:
-#         return HttpResponse("Track not found", status=404)
-#     return render(request, "track/update.html", context)
-
-
 def track_update(request, id):
     context = {}
     try:
