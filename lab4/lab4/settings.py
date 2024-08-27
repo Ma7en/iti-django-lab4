@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "account.apps.AccountConfig",
     "track.apps.TrackConfig",
     "trainee.apps.TraineeConfig",
+    "accounts.apps.AccountsConfig",
     # crispy_forms
     "crispy_forms",
     "crispy_bootstrap5",

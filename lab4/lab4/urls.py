@@ -21,6 +21,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views
 from trainee.views import *
+from django.contrib.admin import *
+from accounts.views import *
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -29,6 +32,9 @@ urlpatterns = [
     path("Trainee/", include("trainee.urls")),
     # path("Trainee/", TraineeListG, name="trainee-list"),
     path("accounts/login/", views.LoginView.as_view(), name="login"),
+    # path("Register", register, name="register"),
+    # path("", login, name="login"),
+    # path("Register", include("accounts.urls")),
     # path("Register", views.R.as_view(), name="register"),
     # path("accounts/profile/", views.FormView.as_view(), name="profile"),
     # path("Logout/", views.LogoutView.as_view(), name="logout"),
