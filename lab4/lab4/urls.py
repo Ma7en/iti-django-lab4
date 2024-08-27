@@ -20,14 +20,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views
+from trainee.views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("Account/", include("account.urls")),
     path("Track/", include("track.urls")),
     path("Trainee/", include("trainee.urls")),
-    path("", views.LoginView.as_view(), name="login"),
-    path("Register", views.LogoutView.as_view(), name="register"),
+    # path("Trainee/", TraineeListG, name="trainee-list"),
+    path("accounts/login/", views.LoginView.as_view(), name="login"),
+    # path("Register", views.R.as_view(), name="register"),
     # path("accounts/profile/", views.FormView.as_view(), name="profile"),
     # path("Logout/", views.LogoutView.as_view(), name="logout"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

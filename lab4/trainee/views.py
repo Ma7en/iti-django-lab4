@@ -5,18 +5,17 @@ from .forms import *
 from account.models import *
 from track.models import *
 from django.views import View
-from django.views.generic import (
-    ListView,
-    UpdateView,
-    DeleteView,
-    DetailView,
-    CreateView,
-)
+from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 # Create your views here.
-
+# @login_required()
+@method_decorator(login_required, name="dispatch")
 
 # =================================================================
 # def trainee_list(request):
@@ -155,6 +154,11 @@ def trainee_delete(request, id):
         return JsonResponse(
             {"success": False, "error": "Trainee not found"}, status=404
         )
+
+
+class TraineeDelete(DeleteView):
+    model = Trainee
+    success_url = reverse_lazy("trainee_list")
 
 
 # =================================================================
